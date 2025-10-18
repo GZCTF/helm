@@ -13,7 +13,7 @@
 ██                                                                    ██
 ████████████████████████████████████████████████████████████████████████
 
-       GZCTF © 2025-present GZTimeWalker      GZCTF {{ .Values.gzctf.image.tag }} 
+                                                      GZCTF {{ .Values.gzctf.image.tag }} 
 
 1. Get the application URL by running these commands:
 {{- if .Values.gzctf.ingress.enabled }}

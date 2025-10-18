@@ -228,7 +228,6 @@ minio:
 | minio.resources.requests.memory | string | `"2Gi"` | Memory request for MinIO |
 | minio.rootPassword | string | `"gzctf"` | MinIO password |
 | minio.rootUser | string | `"gzctf"` | MinIO user |
-| postgresql | object | `{"affinity":{},"enabled":true,"env":[{"name":"POSTGRES_PASSWORD","value":"gzctf"}],"image":{"imagePullSecrets":[],"pullPolicy":"IfNotPresent","registry":"docker.io","repository":"postgres","tag":"16-alpine"},"livenessProbe":{},"nodeSelector":{},"persistence":{"accessMode":"ReadWriteOnce","enabled":true,"size":"2Gi","storageClassName":""},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{},"resources":{"requests":{"cpu":"500m","memory":"512Mi"}},"securityContext":{},"service":{"port":5432},"tolerations":[],"volumeMounts":[],"volumes":[]}` | PostgreSQL database configuration |
 | postgresql-ha.enabled | bool | `false` | Enable or disable PostgreSQL HA deployment (THIS USES BITNAMI LEGACY IMAGES BY DEFAULT WHICH NO LONGER RECIEVE RPOPER SECURITY UPDATES) |
 | postgresql-ha.image.registry | string | `"docker.io"` | Docker registry for PostgreSQL image |
 | postgresql-ha.image.repository | string | `"bitnamilegacy/postgresql-repmgr"` | PostgreSQL repository (legacy repmgr version) |
@@ -259,6 +258,7 @@ minio:
 | postgresql.persistence.size | string | `"2Gi"` | Size of the persistent volume |
 | postgresql.persistence.storageClassName | string | `""` | Storage class name for persistent volume (empty string uses cluster default) |
 | postgresql.podAnnotations | object | `{}` | Annotations to add to PostgreSQL pods |
+| postgresql.podLabels | object | `{}` |  |
 | postgresql.podSecurityContext | object | `{}` | Security context for PostgreSQL pod |
 | postgresql.readinessProbe | object | `{}` | Readiness probe configuration for PostgreSQL container |
 | postgresql.resources | object | `{"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits for PostgreSQL container |

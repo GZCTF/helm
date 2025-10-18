@@ -423,7 +423,7 @@ redis-ha:
   containerSecurityContext:
     readOnlyRootFilesystem: true
 
-# -- PostgreSQL database configuration
+# PostgreSQL database configuration
 postgresql:
   # -- Enable PostgreSQL deployment
   enabled: true
