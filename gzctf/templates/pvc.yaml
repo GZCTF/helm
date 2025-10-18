@@ -1,0 +1,13 @@
+{{- if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "gzctf.fullname" . }}
+spec:
+  accessModes:
+    - {{ .Values.gzctf.pvc.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.gzctf.pvc.size }}
+  storageClassName: {{ .Values.gzctf.pvc.storageClassName }}
+{{ end }}

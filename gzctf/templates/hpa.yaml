@@ -1,0 +1,32 @@
+{{- if .Values.gzctf.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "gzctf.fullname" . }}
+  labels:
+    {{- include "gzctf.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "gzctf.fullname" . }}
+  minReplicas: {{ .Values.gzctf.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.gzctf.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.gzctf.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.gzctf.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.gzctf.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.gzctf.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

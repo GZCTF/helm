@@ -1,0 +1,10 @@
+{{- if .Values.gzctf.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "gzctf.labels" . | nindent 4 }}
+  name: {{ include "gzctf.fullname" . }}
+rules:
+{{ .Values.gzctf.clusterRole.rules | toYaml }}
+{{- end }}

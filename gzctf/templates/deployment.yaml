@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gzctf.fullname" . }}
+  labels:
+    {{- include "gzctf.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.gzctf.autoscaling.enabled }}
+  replicas: {{ .Values.gzctf.replicaCount }}
+  {{- end }}
+  strategy:
+    type: {{ .Values.gzctf.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "gzctf.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.gzctf.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gzctf.labels" . | nindent 8 }}
+        {{- with .Values.gzctf.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.gzctf.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gzctf.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.gzctf.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.gzctf.securityContext | nindent 12 }}
+          image: "{{ .Values.gzctf.image.repository }}:{{ .Values.gzctf.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.gzctf.image.pullPolicy }}
+          env:
+            {{- toYaml .Values.gzctf.env | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.gzctf.service.port }}
+              protocol: TCP
+            {{- if .Values.gzctf.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.gzctf.metrics.port }}
+              protocol: TCP
+            {{- end }}
+          resources:
+            {{- toYaml .Values.gzctf.resources | nindent 12 }}
+          volumeMounts:
+            {{- if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) }}
+            - name: {{ include "gzctf.fullname" . }}
+              mountPath: /app/files
+            {{- end }}
+            - name: {{ include "gzctf.fullname" . }}-appsettings
+              mountPath: /app/appsettings.json
+              subPath: appsettings.json
+              readOnly: true
+          {{ with .Values.gzctf.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        {{ if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
+        - name: {{ include "gzctf.fullname" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "gzctf.fullname" . }}
+        {{- end }}
+        - name: {{ include "gzctf.fullname" . }}-appsettings
+          secret:
+            secretName: {{ include "gzctf.fullname" . }}
+      {{- with .Values.gzctf.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gzctf.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gzctf.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gzctf.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

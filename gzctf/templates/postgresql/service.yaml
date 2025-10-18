@@ -1,0 +1,21 @@
+{{- $postgresqlHa := (index .Values "postgresql-ha") -}}
+{{ if and .Values.postgresql.enabled (not $postgresqlHa.enabled) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gzctf.fullname" . }}-db
+  labels:
+    helm.sh/chart: {{ include "gzctf.chart" . }}
+    app.kubernetes.io/name: {{ include "gzctf.name" . }}-db
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ports:
+    - port: {{ .Values.postgresql.service.port }}
+      targetPort: postgres
+      protocol: TCP
+      name: postgres
+  selector:
+    app.kubernetes.io/name: {{ include "gzctf.name" . }}-db
+{{- end }}
