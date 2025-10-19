@@ -1,5 +1,5 @@
 # GZCTF Helm Chart
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 [![Lint and Server-side Dryrun Chart](https://github.com/GZCTF/helm/actions/workflows/lint-and-test-chart.yaml/badge.svg)](https://github.com/GZCTF/helm/actions/workflows/lint-and-test-chart.yaml)
 
 This is a Helm chart for deploying GZCTF on Kubernetes. It deploys the official [GZCTF Docker image](https://ghcr.io/gztimewalker/gzctf/gzctf). Optional HA/Autoscaling (still experimental) + postgresql or postgresql-ha + [Garnet](https://github.com/microsoft/Garnet) or [redis-ha](https://github.com/DandyDeveloper/charts/tree/master/charts/redis-ha) + [MinIO S3](https://github.com/minio/minio/tree/master/helm/minio). Also supports using external Postgresql/Redis/S3.
