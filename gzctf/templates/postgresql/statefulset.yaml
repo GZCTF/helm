@@ -70,7 +70,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: {{ include "gzctf.fullname" . }}-db
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
+              subPath: data
           {{- with .Values.postgresql.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
