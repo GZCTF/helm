@@ -50,60 +50,6 @@ gzctf:
         //"RedisCache": "gzctf-garnet:6379,password=gzctf",
         //"Storage": "minio.s3://serviceUrl=gzctf-minio;keyId=gzctf;key=gzctf;bucket=gzctf-bucket"
       },
-      "Logging": {
-        "LogLevel": {
-          "Default": "Information",
-          "Microsoft": "Warning",
-          "Microsoft.Hosting.Lifetime": "Information"
-        },
-        "Loki": {
-          "Enable": false,
-          "EndpointUri": "http://loki:3100",
-          "Labels": [
-            {
-              "Key": "app",
-              "Value": "gzctf"
-            }
-          ],
-          "PropertiesAsLabels": ["app"],
-          "Credentials": {
-            "Login": "login",
-            "Password": "password"
-          },
-          "Tenant": "my-tenant",
-          "MinimumLevel": "Trace"
-        }
-      },
-      "Telemetry": {
-        "Prometheus": {
-          "Enable": false,
-          "Port": 3000,
-          "TotalNameSuffixForCounters": false
-        },
-        "OpenTelemetry": {
-          "Enable": false,
-          "Protocol": "Grpc",
-          "EndpointUri": "http://jaeger-collector:4317"
-        },
-        "AzureMonitor": {
-          "Enable": false,
-          "ConnectionString": "InstrumentationKey=12345678-abcd-abcd-abcd-12345678..."
-        },
-        "Console": {
-          "Enable": true
-        }
-      },
-      "EmailConfig": {
-        "SenderAddress": "",
-        "SenderName": "",
-        "UserName": "",
-        "Password": "",
-        "Smtp": {
-          "Host": "localhost",
-          "Port": 587,
-          "BypassCertVerify": false
-        }
-      },
       "XorKey": "gzctf",
       "ContainerProvider": {
         "Type": "Kubernetes",
@@ -111,9 +57,7 @@ gzctf:
         "EnableTrafficCapture": false,
         "PublicEntry": "ctf.example.com",
         "KubernetesConfig": {
-          // optional
           "Namespace": "gzctf-challenges",
-          "ConfigPath": "kube-config.yaml",
           "AllowCIDR": [
             "10.0.0.0/8"
           ],
@@ -122,55 +66,6 @@ gzctf:
             "223.5.5.5"
           ]
         }
-      },
-      "RequestLogging": false,
-      "DisableRateLimit": false,
-      "Registries": {
-        "ghcr.io": {
-          "UserName": "...",
-          "Password": "ghp_..."
-        },
-        "docker.io": {
-          "UserName": "...",
-          "Password": "..."
-        },
-        "your.custom.registry": {
-          "UserName": "...",
-          "Password": "..."
-        }
-      },
-      "CaptchaConfig": {
-        "Provider": "None", // or "CloudflareTurnstile" or "HashPow"
-        "SiteKey": "<Your SITE_KEY>",
-        "SecretKey": "<Your SECRET_KEY>"
-      },
-      "ForwardedOptions": {
-        "ForwardedHeaders": 5, // a flag enum, see following link
-        "ForwardLimit": 1,
-        "ForwardedForHeaderName": "X-Forwarded-For",
-        // use the following options to allow proxy
-        "TrustedNetworks": ["10.0.0.0/8"],
-        "TrustedProxies": ["10.0.0.1"]
-      },
-      "Kestrel": {
-        "Limits": {
-          "MaxResponseBufferSize": 2048,
-          "MaxRequestBufferSize": 1048576,
-          "MaxRequestLineSize": 8192,
-          "MaxRequestHeadersTotalSize": 32768,
-          "MaxRequestHeaderCount": 100,
-          "MaxRequestBodySize": 27262946,
-          "KeepAliveTimeout": "0.0:5:0",
-          "RequestHeadersTimeout": "0.0:5:0",
-          "MaxConcurrentConnections": null,
-          "MaxConcurrentUpgradedConnections": null
-        },
-        "AddServerHeader": true,
-        "AllowResponseHeaderCompression": true,
-        "AllowSynchronousIO": false,
-        "AllowAlternateSchemes": false,
-        "DisableStringReuse": false,
-        "ConfigurationLoader": null
       }
     }
 

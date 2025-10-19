@@ -56,19 +56,26 @@ spec:
             {{- if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) }}
             - name: {{ include "gzctf.fullname" . }}
               mountPath: /app/files
+            {{- else if and (.Values.minio.enabled) (not .Values.gzctf.pvc.create) }}
+            - name: emptydir
+              mountPath: /app/files
             {{- end }}
             - name: {{ include "gzctf.fullname" . }}-appsettings
               mountPath: /app/appsettings.json
               subPath: appsettings.json
               readOnly: true
-          {{ with .Values.gzctf.volumeMounts }}
+          {{- with .Values.gzctf.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-        {{ if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
+        {{- if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
         - name: {{ include "gzctf.fullname" . }}
           persistentVolumeClaim:
             claimName: {{ include "gzctf.fullname" . }}
+        {{- else if and (.Values.minio.enabled) (not .Values.gzctf.pvc.create) }}
+        - name: emptydir
+          emptyDir:
+            sizeLimit: 1Mi
         {{- end }}
         - name: {{ include "gzctf.fullname" . }}-appsettings
           secret:
