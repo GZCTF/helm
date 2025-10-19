@@ -6,12 +6,15 @@ on:
       - main
     paths:
       - 'gzctf/**'
+      - '!gzctf/README.md'
+      - '!gzctf/README.md.gotmpl'
   pull_request:
     branches:
       - main
     paths:
       - 'gzctf/**'
-
+      - '!gzctf/README.md'
+      - '!gzctf/README.md.gotmpl'
 
 jobs:
   lint-test:

@@ -7,6 +7,8 @@ on:
       - main
     paths:
       - 'gzctf/**'
+      - '!gzctf/README.md'
+      - '!gzctf/README.md.gotmpl'
 
 jobs:
   release:

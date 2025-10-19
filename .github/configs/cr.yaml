@@ -4,3 +4,6 @@ index-path: "./index.yaml"
 # Enable automatic generation of release notes using GitHubs release notes generator.
 # see: https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
 generate-release-notes: true
+
+# Skip existing releases (if chart version wasn't bumped)
+skip-existing: true
