@@ -158,7 +158,6 @@ minio:
 | gzctf.autoscaling.minReplicas | int | `1` | Minimum number of replicas |
 | gzctf.autoscaling.targetCPUUtilizationPercentage | int | `80` | Target CPU utilization percentage |
 | gzctf.autoscaling.targetMemoryUtilizationPercentage | int | `80` | Target memory utilization percentage |
-| gzctf.clusterRole | object | `{"create":true,"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]},{"nonResourceURLs":["*"],"verbs":["*"]}]}` | Kubernetes ClusterRole configuration for GZCTF |
 | gzctf.clusterRole.create | bool | `true` | Create ClusterRole for GZCTF (required for Kubernetes challenge container management) |
 | gzctf.clusterRole.rules | list | `[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]},{"nonResourceURLs":["*"],"verbs":["*"]}]` | ClusterRole rules (full cluster access for managing challenge containers) |
 | gzctf.env | list | `[{"name":"GZCTF_ADMIN_PASSWORD","value":"xxx"},{"name":"LC_ALL","value":"en_US.UTF-8"}]` | Environment variables for GZCTF container |
@@ -170,7 +169,6 @@ minio:
 | gzctf.image.repository | string | `"ghcr.io/gztimewalker/gzctf/gzctf"` | GZCTF image repository |
 | gzctf.image.tag | string | `"v1.6.2"` | GZCTF image tag |
 | gzctf.imagePullSecrets | list | `[]` | Image pull secrets for private container registries |
-| gzctf.ingress | object | `{"annotations":{"traefik.ingress.kubernetes.io/service.sticky.cookie":"true","traefik.ingress.kubernetes.io/service.sticky.cookie.httponly":"true","traefik.ingress.kubernetes.io/service.sticky.cookie.name":"LB_Session"},"className":"","enabled":true,"hosts":[{"host":"ctf.example.com","paths":[{"path":"/","pathType":"Prefix"}]}],"tls":[]}` | Ingress configuration for GZCTF |
 | gzctf.ingress.annotations | object | `{"traefik.ingress.kubernetes.io/service.sticky.cookie":"true","traefik.ingress.kubernetes.io/service.sticky.cookie.httponly":"true","traefik.ingress.kubernetes.io/service.sticky.cookie.name":"LB_Session"}` | Annotations for ingress resource |
 | gzctf.ingress.className | string | `""` | Ingress class name |
 | gzctf.ingress.enabled | bool | `true` | Enable ingress for GZCTF |
@@ -184,7 +182,6 @@ minio:
 | gzctf.podAnnotations | object | `{}` | Annotations to add to GZCTF pods |
 | gzctf.podLabels | object | `{}` | Labels to add to GZCTF pods |
 | gzctf.podSecurityContext | object | `{}` | Security context for GZCTF pod |
-| gzctf.pvc | object | `{"accessMode":"ReadWriteOnce","create":true,"size":"2Gi","storageClassName":"standard"}` | Persistent Volume Claim configuration for GZCTF data |
 | gzctf.pvc.accessMode | string | `"ReadWriteOnce"` | Access mode for the PVC (use ReadWriteMany when deploying multiple instances) |
 | gzctf.pvc.create | bool | `true` | Create a PVC for GZCTF |
 | gzctf.pvc.size | string | `"2Gi"` | Size of the PVC |
@@ -209,14 +206,12 @@ minio:
 | gzctf.tolerations | list | `[]` | Tolerations for GZCTF pod scheduling |
 | gzctf.volumeMounts | list | `[]` | Additional volume mounts for GZCTF container |
 | gzctf.volumes | list | `[]` | Additional volumes for GZCTF pod |
-| minio | object | `{"buckets":[{"name":"gzctf-bucket","policy":"download","purge":false}],"drivesPerNode":1,"enabled":false,"ingress":{"annotations":{},"enabled":true,"hosts":["minio.example.com"]},"persistence":{"size":"10Gi"},"replicas":3,"resources":{"requests":{"memory":"2Gi"}},"rootPassword":"gzctf","rootUser":"gzctf"}` | MinIO object storage configuration (override the minio subchart values) |
 | minio.buckets | list | `[{"name":"gzctf-bucket","policy":"download","purge":false}]` | MinIO bucket configuration |
 | minio.buckets[0] | object | `download` policy means this bucket is readonly for anonymous access (competitors) | Default bucket to be used by GZCTF |
 | minio.buckets[0].policy | string | `"download"` | Bucket access policy (download = readonly for anonymous users) |
 | minio.buckets[0].purge | bool | `false` | Whether to purge the bucket on deletion |
 | minio.drivesPerNode | int | `1` | Number of drives per MinIO replica/node |
 | minio.enabled | bool | `false` | Enable MinIO deployment (set to false if you want to use an external S3 bucket) |
-| minio.ingress | object | `{"annotations":{},"enabled":true,"hosts":["minio.example.com"]}` | Ingress configuration for MinIO (used by both GZCTF and competitors) |
 | minio.ingress.annotations | object | `{}` | Annotations for MinIO ingress |
 | minio.ingress.enabled | bool | `true` | Enable ingress for MinIO |
 | minio.ingress.hosts | list | `["minio.example.com"]` | Hostnames for MinIO ingress |
@@ -252,7 +247,6 @@ minio:
 | postgresql.image.tag | string | `"16-alpine"` | PostgreSQL image tag |
 | postgresql.livenessProbe | object | `{}` | Liveness probe configuration for PostgreSQL container |
 | postgresql.nodeSelector | object | `{}` | Node labels for PostgreSQL pod assignment |
-| postgresql.persistence | object | `{"accessMode":"ReadWriteOnce","enabled":true,"size":"2Gi","storageClassName":""}` | PostgreSQL persistent storage configuration |
 | postgresql.persistence.accessMode | string | `"ReadWriteOnce"` | Access mode for the persistent volume |
 | postgresql.persistence.enabled | bool | `true` | Enable persistent storage for PostgreSQL |
 | postgresql.persistence.size | string | `"2Gi"` | Size of the persistent volume |

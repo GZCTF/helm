@@ -23,7 +23,7 @@ gzctf:
     - name: LC_ALL
       value: "en_US.UTF-8"
 
-  # -- Kubernetes ClusterRole configuration for GZCTF
+  # Kubernetes ClusterRole configuration for GZCTF
   clusterRole:
     # -- Create ClusterRole for GZCTF (required for Kubernetes challenge container management)
     create: true
@@ -116,7 +116,7 @@ gzctf:
     # -- Metrics port number
     port: 3000
 
-  # -- Ingress configuration for GZCTF
+  # Ingress configuration for GZCTF
   ingress:
     # -- Enable ingress for GZCTF
     enabled: true
@@ -169,7 +169,7 @@ gzctf:
     # -- Target memory utilization percentage
     targetMemoryUtilizationPercentage: 80
 
-  # -- Persistent Volume Claim configuration for GZCTF data
+  # Persistent Volume Claim configuration for GZCTF data
   pvc:
     # -- Create a PVC for GZCTF
     create: true
@@ -350,7 +350,7 @@ postgresql:
   
   podLabels: {}
   
-  # -- PostgreSQL persistent storage configuration
+  # PostgreSQL persistent storage configuration
   persistence:
     # -- Enable persistent storage for PostgreSQL
     enabled: true
@@ -442,7 +442,7 @@ postgresql-ha:
     # -- Default database name to create
     database: "gzctf"
 
-# -- MinIO object storage configuration (override the minio subchart values)
+# MinIO object storage configuration (override the minio subchart values)
 minio:
   # -- Enable MinIO deployment (set to false if you want to use an external S3 bucket)
   enabled: false
@@ -457,7 +457,7 @@ minio:
       # -- Whether to purge the bucket on deletion
       purge: false
   
-  # -- Ingress configuration for MinIO (used by both GZCTF and competitors)
+  # Ingress configuration for MinIO (used by both GZCTF and competitors)
   ingress:
     # -- Enable ingress for MinIO
     enabled: true
