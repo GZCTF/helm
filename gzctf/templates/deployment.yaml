@@ -68,7 +68,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-        {{- if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
+        {{ if and (not .Values.minio.enabled) (.Values.gzctf.pvc.create) -}}
         - name: {{ include "gzctf.fullname" . }}
           persistentVolumeClaim:
             claimName: {{ include "gzctf.fullname" . }}
