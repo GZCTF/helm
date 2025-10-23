@@ -1,5 +1,5 @@
 # GZCTF Helm Chart
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 [![Lint and Server-side Dryrun Chart](https://github.com/GZCTF/helm/actions/workflows/lint-and-test-chart.yaml/badge.svg)](https://github.com/GZCTF/helm/actions/workflows/lint-and-test-chart.yaml)
 
 This is a Helm chart for deploying GZCTF on Kubernetes. It deploys the official [GZCTF Docker image](https://ghcr.io/gztimewalker/gzctf/gzctf). Optional HA/Autoscaling (still experimental) + postgresql or postgresql-ha + [Garnet](https://github.com/microsoft/Garnet) or [redis-ha](https://github.com/DandyDeveloper/charts/tree/master/charts/redis-ha) + [MinIO S3](https://github.com/minio/minio/tree/master/helm/minio). Also supports using external Postgresql/Redis/S3.
@@ -42,9 +42,12 @@ helm install release-name . -f values.yaml --create-namespace --namespace gzctf
 helm uninstall release-name --namespace gzctf
 ```
 
-## Info
-- multi-node is still experimental (needs extensive testing)
-- postgresql-ha bitnami image is legacy/deprecated
+## Important Notes
+- multi-node deployment is still experimental (needs extensive testing)
+- gzctf support for s3 bucket is experimental (single-node deployment doesnt need s3 bucket)
+- garnet/redis is not needed for single-node deployment
+- minio stopped releasing community edition binaries and docker images [minio/minio/issues/21647](https://github.com/minio/minio/issues/21647)
+- postgresql-ha bitnami image is [legacy/deprecated](https://github.com/bitnami/containers/issues/83267)
 
 ## Values examples
 
@@ -141,7 +144,7 @@ minio:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| extraObjects | list | [] | Additional Kubernetes manifests to deploy with this Helm chart |
+| extraObjects | list | `[]` | Additional Kubernetes manifests to deploy with this Helm chart |
 | garnet.config.existingSecret | string | `""` | Garnet secret (if you want to use an existing secret). This secret must contains a key called 'garnet.conf'. |
 | garnet.config.garnetConf | string | `"{\n  \"AuthenticationMode\": \"Password\",\n  \"Password\": \"gzctf\"\n}\n"` | The garnet.conf data content. |
 | garnet.enabled | bool | `false` | Enable Microsoft Garnet cache-store deployment |
@@ -224,17 +227,27 @@ minio:
 | minio.rootPassword | string | `"gzctf"` | MinIO password |
 | minio.rootUser | string | `"gzctf"` | MinIO user |
 | postgresql-ha.enabled | bool | `false` | Enable or disable PostgreSQL HA deployment (THIS USES BITNAMI LEGACY IMAGES BY DEFAULT WHICH NO LONGER RECIEVE RPOPER SECURITY UPDATES) |
-| postgresql-ha.image.registry | string | `"docker.io"` | Docker registry for PostgreSQL image |
-| postgresql-ha.image.repository | string | `"bitnamilegacy/postgresql-repmgr"` | PostgreSQL repository (legacy repmgr version) |
-| postgresql-ha.image.tag | string | `"17.6.0-debian-12-r2"` | PostgreSQL image tag (version 17.6.0) |
+| postgresql-ha.metrics.enabled | bool | `false` | postgresql exporter enable |
+| postgresql-ha.metrics.image.registry | string | `"docker.io"` | postgres-exporter image registry |
+| postgresql-ha.metrics.image.repository | string | `"bitnamilegacy/postgres-exporter"` | postgres-exporter image repository |
+| postgresql-ha.metrics.image.tag | string | `"0.17.1-debian-12-r16"` | postgres-exporter image tag |
 | postgresql-ha.persistence.accessMode | string | `"ReadWriteOnce"` | Volume access mode |
 | postgresql-ha.persistence.enabled | bool | `true` | Enable persistent volume for database storage |
 | postgresql-ha.persistence.size | string | `"2Gi"` | Persistent volume size |
 | postgresql-ha.persistence.storageClass | string | `""` | Storage class name (empty string uses cluster default) |
+| postgresql-ha.pgpool.image.registry | string | `"docker.io"` | pgpool image registry |
+| postgresql-ha.pgpool.image.repository | string | `"bitnamilegacy/pgpool"` | pgpool image repository |
+| postgresql-ha.pgpool.image.tag | string | `"4.6.3-debian-12-r0"` | pgpool image tag |
 | postgresql-ha.postgresql.database | string | `"gzctf"` | Default database name to create |
+| postgresql-ha.postgresql.image.registry | string | `"docker.io"` | Docker registry for PostgreSQL image |
+| postgresql-ha.postgresql.image.repository | string | `"bitnamilegacy/postgresql-repmgr"` | PostgreSQL repository (bitnamilegacy repmgr version) |
+| postgresql-ha.postgresql.image.tag | string | `"17.6.0-debian-12-r2"` | PostgreSQL image tag (version 17.6.0) |
 | postgresql-ha.postgresql.password | string | `"gzctf"` | PostgreSQL superuser password (should be overridden or use secrets) |
 | postgresql-ha.postgresql.username | string | `"postgres"` | PostgreSQL superuser username |
 | postgresql-ha.volumePermissions.enabled | bool | `true` | Enable init container to set proper volume permissions |
+| postgresql-ha.volumePermissions.image.registry | string | `"docker.io"` | volume-permissions image registry |
+| postgresql-ha.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` | volume-permissions image repository |
+| postgresql-ha.volumePermissions.image.tag | string | `"12-debian-12-r51"` | volume-permissions image tag |
 | postgresql.affinity | object | `{}` | Affinity rules for PostgreSQL pod scheduling |
 | postgresql.enabled | bool | `true` | Enable PostgreSQL deployment |
 | postgresql.env | list | `[{"name":"POSTGRES_PASSWORD","value":"gzctf"}]` | Environment variables for PostgreSQL container |

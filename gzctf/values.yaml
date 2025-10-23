@@ -408,20 +408,55 @@ postgresql-ha:
   # -- Enable or disable PostgreSQL HA deployment (THIS USES BITNAMI LEGACY IMAGES BY DEFAULT WHICH NO LONGER RECIEVE RPOPER SECURITY UPDATES)
   enabled: false
   
-  # Container image configuration
-  image:
-    # -- Docker registry for PostgreSQL image
-    registry: docker.io
-    # -- PostgreSQL repository (legacy repmgr version)
-    repository: bitnamilegacy/postgresql-repmgr
-    # -- PostgreSQL image tag (version 17.6.0)
-    tag: 17.6.0-debian-12-r2
-  
+  postgresql:
+    # Container image configuration
+    image:
+      # -- Docker registry for PostgreSQL image
+      registry: docker.io
+      # -- PostgreSQL repository (bitnamilegacy repmgr version)
+      repository: bitnamilegacy/postgresql-repmgr
+      # -- PostgreSQL image tag (version 17.6.0)
+      tag: 17.6.0-debian-12-r2
+    # -- PostgreSQL superuser username
+    username: "postgres"
+    # -- PostgreSQL superuser password (should be overridden or use secrets)
+    password: "gzctf"
+    # -- Default database name to create
+    database: "gzctf"
+
+
+  pgpool:
+    image:
+      # -- pgpool image registry
+      registry: docker.io
+      # -- pgpool image repository
+      repository: bitnamilegacy/pgpool
+      # -- pgpool image tag
+      tag: 4.6.3-debian-12-r0
+
+  metrics:
+    # -- postgresql exporter enable
+    enabled: false
+    image:
+      # -- postgres-exporter image registry
+      registry: docker.io
+      # -- postgres-exporter image repository
+      repository: bitnamilegacy/postgres-exporter
+      # -- postgres-exporter image tag
+      tag: 0.17.1-debian-12-r16
+
   # Volume permissions initialization
   volumePermissions:
     # -- Enable init container to set proper volume permissions
     enabled: true
-  
+    image:
+      # -- volume-permissions image registry
+      registry: docker.io
+      # -- volume-permissions image repository
+      repository: bitnamilegacy/os-shell
+      # -- volume-permissions image tag
+      tag: 12-debian-12-r51
+
   # Persistent storage configuration
   persistence:
     # -- Enable persistent volume for database storage
@@ -432,15 +467,6 @@ postgresql-ha:
     accessMode: ReadWriteOnce
     # -- Persistent volume size
     size: 2Gi
-  
-  # PostgreSQL database configuration
-  postgresql:
-    # -- PostgreSQL superuser username
-    username: "postgres"
-    # -- PostgreSQL superuser password (should be overridden or use secrets)
-    password: "gzctf"
-    # -- Default database name to create
-    database: "gzctf"
 
 # MinIO object storage configuration (override the minio subchart values)
 minio:
@@ -492,5 +518,4 @@ minio:
     size: 10Gi
 
 # -- Additional Kubernetes manifests to deploy with this Helm chart
-# @default -- []
 extraObjects: []
