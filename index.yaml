@@ -2,6 +2,33 @@ apiVersion: v1
 entries:
   gzctf:
   - apiVersion: v2
+    created: "2025-10-23T21:59:48.881578199Z"
+    dependencies:
+    - condition: garnet.enabled
+      name: garnet
+      repository: oci://ghcr.io/microsoft/helm-charts
+      version: 0.2.2
+    - condition: redis-ha.enabled
+      name: redis-ha
+      repository: https://dandydeveloper.github.io/charts
+      version: 4.33.7
+    - condition: postgresql-ha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.3.2
+    - alias: minio
+      condition: minio.enabled
+      name: minio
+      repository: https://charts.min.io
+      version: 5.4.0
+    description: A Helm chart for deploying GZCTF on Kubernetes
+    digest: 15b7842eb3a266dae3cf55f8e36d19c7dd9383093e0aef861a9b1964a2227234
+    name: gzctf
+    type: application
+    urls:
+    - https://github.com/GZCTF/helm/releases/download/gzctf-0.1.5/gzctf-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
     created: "2025-10-20T21:29:49.168654048Z"
     dependencies:
     - condition: garnet.enabled
@@ -109,4 +136,4 @@ entries:
     urls:
     - https://github.com/GZCTF/helm/releases/download/gzctf-0.1.1/gzctf-0.1.1.tgz
     version: 0.1.1
-generated: "2025-10-20T21:29:49.168676019Z"
+generated: "2025-10-23T21:59:48.881603787Z"
